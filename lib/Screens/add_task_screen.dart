@@ -15,12 +15,18 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   TextEditingController _dateController =  TextEditingController();
   _handleDatePicker()async{
-final DateTime date = await ShowDatePicker(
+final DateTime? date = await showDatePicker(
   context :context,
   initialDate :_date,
   firstDate : DateTime(2000),
-  LastDate : DateTime(2050)
+  lastDate : DateTime(2050),
 );
+if (date != null && date != _date){
+  setState(() {
+    _date= date;
+  });
+  _dateController.text = _date.toString();
+}
 
   }
 
@@ -60,7 +66,7 @@ final DateTime date = await ShowDatePicker(
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20),
                   child: TextFormField(
-                    onTap: _handleDatePicker;
+                    onTap: _handleDatePicker,
                     decoration: InputDecoration(
                         labelText: 'Date',
                         border: OutlineInputBorder(
