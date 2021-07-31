@@ -68,8 +68,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   ],
                 ),
               );
-            }else{
-              return "coll";
+            
             }
             return  _buildTask(index);
           }),
