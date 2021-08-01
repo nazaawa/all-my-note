@@ -18,6 +18,19 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   final DateFormat _dateFormatter = DateFormat("MMM dd ,yyyy");
 
   TextEditingController _dateController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _dateController.text = _dateFormatter.format(_date);
+  }
+
+  @override
+  dispose() {
+    _dateController.dispose();
+    super.dispose();
+  }
+
   _handleDatePicker() async {
     final DateTime? date = await showDatePicker(
       context: context,
@@ -29,7 +42,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       setState(() {
         _date = date;
       });
-      return _dateController.text = _dateFormatter.format(date);
+    }
+  }
+
+  _submit() {
+    if (_formkey.currentState!.validate()) {
+      _formkey.currentState!.save();
+      Navigator.of(context);
+      print("$_title, $_date,$_priority");
     }
   }
 
@@ -90,6 +110,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 20),
                       child: DropdownButtonFormField(
+                        isDense: true,
                         icon: Icon(Icons.arrow_drop_down_circle),
                         items: _priorities.map((String priority) {
                           return DropdownMenuItem(
@@ -107,7 +128,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                 borderRadius: BorderRadius.circular(10.0))),
                         style: TextStyle(fontSize: 18.0),
                         validator: (dynamic value) => _priority == ''
-                            ? 'Entre une la priorité de la tache'
+                            ? 'Entre  la priorité de la tache'
                             : null,
                         onChanged: (dynamic value) {
                           setState(() {
@@ -118,13 +139,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     ),
                     Container(
                         decoration: BoxDecoration(
-                          borderRadius:BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20),
                             color: Theme.of(context).primaryColor),
                         margin: EdgeInsets.symmetric(vertical: 20),
                         height: 60.0,
                         width: double.infinity,
                         child: TextButton(
-                          onPressed: () {},
+                          onPressed: _submit,
                           child: Text("Add",
                               style: TextStyle(color: Colors.white)),
                         ))
